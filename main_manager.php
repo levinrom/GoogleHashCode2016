@@ -9,8 +9,14 @@ require_once('src/parser.php');
 require_once('Utils.php');
 
 
-function parseCommand($drone, $cmd, $p1, $p2, $p3, $p4) {
+function parseCommand($drone, $cmd, $p1, $p2, $p3, $p4='') {
     return $drone->Id." ".$cmd." ".$p1." ".$p2." ".$p3;
+}
+
+function printCommands($commands) {
+    foreach($commands as $command) {
+        echo $command;
+    }
 }
 
 $world = [
@@ -31,13 +37,13 @@ $world = parser::Parse();
 
 // Event loop
 for ($currStep = 0; $currStep < $world["simLength"]; $currStep++) {
-    $world["orders"] = OptimiseOrders::sortOrders($world);
+    $optimize = new OptimiseOrders();
+    $world["orders"] = $optimize->sortOrders($world);
 
     foreach ($world["drones"] as $drone) {
-        if ($drone->getState() == "busy") {
+        if ($drone->isBusy()) {
             $result = $drone->doStep();
-        }
-        else {
+        } else {
             // find next suitable delivery. Sorted by importance.
             foreach($world["orders"] as $order) {
                 foreach($order["deliveries"] as $delivery) {
@@ -64,12 +70,13 @@ for ($currStep = 0; $currStep < $world["simLength"]; $currStep++) {
 
                         $chosenWh = $world["warehouses"][$whIndex];
 
-                        if ($drone->addAction('L', $chosenWh["x"], $chosenWh["y"], $delivery["pId"], $delivery["amount"])) {
-                            $drone->addAction('D', $delivery["x"], $delivery["y"], $delivery["pId"], $delivery["amount"]);
+                        if ($drone->addAction('L', $chosenWh["x"], $chosenWh["y"], $world["products"][$delivery["pId"]], $delivery["amount"])) {
+                            $drone->addAction('D', $delivery["x"], $delivery["y"], $world["products"][$delivery["pId"]], $delivery["amount"]);
 
                             // Add to commands
                             // for Load: droneId L whId pId amount
-
+                            $commands[] = parseCommand($drone, 'L', $chosenWh->id, $delivery["pId"], $delivery["amount"]);
+                            $commands[] = parseCommand($drone, 'D', $order->id, $delivery["pId"], $delivery["amount"]);
                         }
                     }
                 }
@@ -77,3 +84,5 @@ for ($currStep = 0; $currStep < $world["simLength"]; $currStep++) {
         }
     }
 }
+
+printCommands($commands);

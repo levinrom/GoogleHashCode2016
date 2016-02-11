@@ -30,7 +30,7 @@ class Drone
         $this->status = !$this->status;
     }
 
-    function getStatus()
+    function isBusy()
     {
         return $this->status;
     }
@@ -46,6 +46,7 @@ class Drone
         }
         return $res;
     }
+
 
     /**
      * @param $type
@@ -76,13 +77,6 @@ class Drone
 
         return $res;
     }
-
-    function doStep() {
-        if ($this->steps > 0) {
-            $this->steps--;
-        } else {
-            $this->status = false;
-        }
-    }
+    
 
 }

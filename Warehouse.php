@@ -23,15 +23,31 @@ class Warehouse
     }
 
     /**
-     * @param Product $product
+     * @param int $productId
      * @param int $quantity
      * @return bool
      */
-    function hasProduct($product, $quantity = 1) {
+    function hasProduct($productId, $quantity = 1) {
         $res = false;
-        if ($this->products[$product->getId()] >= $quantity) {
+        if ($this->products[$productId] >= $quantity) {
             $res = true;
         }
         return $res;
     }
+
+    /**
+     * @param int $productId
+     * @param int $quantity
+     * @return bool
+     */
+    function fetchProduct($productId, $quantity = 1) {
+        if ($this->hasProduct($productId, $quantity)) {
+            $this->products[$productId] -= $quantity;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
 }
