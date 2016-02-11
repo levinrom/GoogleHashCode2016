@@ -40,6 +40,7 @@ class OptimiseOrders {
         // Update warehouses
         foreach ($selectedOrder['warehouses'] as $wId => $wProduct ) {
             $cWarehouse = $warehouses[$wId];
+            /** @var $cWarehouse Warehouse */
             $cWarehouse->fetchProduct($wProduct['id'], $wProduct['quantity']);
             $warehouses[$wId] = $cWarehouse;
         }
@@ -47,7 +48,7 @@ class OptimiseOrders {
 
         if (count($orderByScore) == 1) {
             $this->listOfOrders[] = $orderByScore[0];
-            return;
+            return $this->listOfOrders;
         }
         else {
             $this->listOfOrders[] = $orderByScore[0];

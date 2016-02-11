@@ -43,7 +43,7 @@ class Warehouse
     function fetchProduct($productId, $quantity = 1) {
         if ($this->hasProduct($productId, $quantity)) {
             $this->products[$productId] -= $quantity;
-            return false;
+            return true;
         } else {
             return false;
         }
