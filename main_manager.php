@@ -3,7 +3,7 @@
 require_once('OptimiseOrders.php');
 require_once('Drone.php');
 //require_once('product.php');
-//require_once('warehouse.php');
+require_once('Warehouse.php');
 //require_once('delivery.php');
 require_once('src/parser.php');
 
@@ -17,7 +17,7 @@ $world = [
     "warehouses" => [],
     "products" => [],
     "drones" => [],
-    "deliveries" => []
+    "orders" => []
 ];
 
 
@@ -25,7 +25,7 @@ $world = parser::Parse();
 
 // Event loop
 for ($currStep = 0; $currStep < $world["simLength"]; $currStep++) {
-    $world["deliveries"] = OptimiseOrders::sortOrders($world);
+    $world["orders"] = OptimiseOrders::sortOrders($world);
 
     foreach ($world["drones"] as $drone) {
         if ($drone->getState() == "busy") {
@@ -33,10 +33,8 @@ for ($currStep = 0; $currStep < $world["simLength"]; $currStep++) {
         }
         else {
             // find next suitable delivery
-            $deliveryFound = false;
-            $currDelivery = 0;
-            while(!$deliveryFound) {
-                $delivery = $world["deliveries"][$currDelivery];
+
+            foreach($world["orders"] as $order) {
 
             }
         }
