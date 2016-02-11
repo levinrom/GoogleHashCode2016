@@ -14,6 +14,7 @@ class Drone
     private $productsArray;
     private $status;
     private $maxPayload;
+    private $steps;
 
     function __construct($payload, $x, $y)
     {
@@ -21,6 +22,7 @@ class Drone
         $this->x            = $x;
         $this->y            = $y;
         $this->status       = false;
+        $this->steps        = 0;
     }
 
     function changeStatus()
@@ -45,5 +47,42 @@ class Drone
         return $res;
     }
 
+    /**
+     * @param $type
+     * @param $x
+     * @param $y
+     * @param Product $product
+     * @param $productAmount
+     */
+    function addAction($type, $x, $y, $product, $productAmount) {
+        $res = false;
+        if (!$this->status) {
+            if ($type == 'L') {
+                if ($this->addProduct($product->getId(), $product->getWeight(), $productAmount)) {
+                    $res = true;
+                    $this->steps = ceil(sqrt(($this->x - $x)*($this->x - $x) + ($this->y - $y)*($this->y - $y)));
+                    $this->status = true;
+                    $this->x = $x;
+                    $this->y = $y;
+                }
+            } else if ($type == 'D') {
+                $res = true;
+                $this->steps = ceil(sqrt(($this->x - $x)*($this->x - $x) + ($this->y - $y)*($this->y - $y)));
+                $this->status = true;
+                $this->x = $x;
+                $this->y = $y;
+            }
+        }
+
+        return $res;
+    }
+
+    function doStep() {
+        if ($this->steps > 0) {
+            $this->steps--;
+        } else {
+            $this->status = false;
+        }
+    }
 
 }
