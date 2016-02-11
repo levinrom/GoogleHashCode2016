@@ -8,7 +8,7 @@
 
 
 class OptimiseOrders {
-    public static function sortOrders($warehouses, $orders, $drones) {
+    public static function sortOrders($world) {
 
         // Give each order a score
         $orderScores = array();
