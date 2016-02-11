@@ -14,14 +14,15 @@ class Drone
     private $productsArray;
     private $status;
     private $maxPayload;
+    private $steps;
 
     function __construct($payload, $x, $y)
     {
-        $this->maxPayload   = $payload;
-        $this->x            = $x;
-        $this->y            = $y;
-        $this->status       = false;
-        $this->steps        = 0;
+        $this->maxPayload = $payload;
+        $this->x = $x;
+        $this->y = $y;
+        $this->status = false;
+        $this->steps = 0;
     }
 
     function changeStatus()
@@ -34,7 +35,7 @@ class Drone
         return $this->status;
     }
 
-    function addProduct($prodId, $prodWeight ,$quantity)
+    function addProduct($prodId, $prodWeight, $quantity)
     {
         $res = false;
         $totalWeight = $this->currentPayload + ($prodWeight * $quantity);
@@ -46,19 +47,46 @@ class Drone
         return $res;
     }
 
-    function doStep() {
+    function doStep()
+    {
         if ($this->steps > 0) {
             $this->steps--;
         } else {
             // get next command
             if (count($this->commands) > 0) {
                 $nextCommand = $this->commands[0];
-
-            } else {
-                // not busy
-                $this->status = false;
             }
         }
     }
 
+    /**
+     * @param $type
+     * @param $x
+     * @param $y
+     * @param Product $product
+     * @param $productAmount
+     */
+    function addAction($type, $x, $y, $product, $productAmount)
+    {
+        $res = false;
+        if (!$this->status) {
+            if ($type == 'L') {
+                if ($this->addProduct($product->getId(), $product->getWeight(), $productAmount)) {
+                    $res = true;
+                    $this->steps = ceil(sqrt(($this->x - $x) * ($this->x - $x) + ($this->y - $y) * ($this->y - $y)));
+                    $this->status = true;
+                    $this->x = $x;
+                    $this->y = $y;
+                }
+            } else if ($type == 'D') {
+                $res = true;
+                $this->steps = ceil(sqrt(($this->x - $x) * ($this->x - $x) + ($this->y - $y) * ($this->y - $y)));
+                $this->status = true;
+                $this->x = $x;
+                $this->y = $y;
+            }
+        }
+
+        return $res;
+    }
 }
