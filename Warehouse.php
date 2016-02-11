@@ -21,4 +21,17 @@ class Warehouse
         $this->y = $y;
         $this->products = $products;
     }
+
+    /**
+     * @param Product $product
+     * @param int $quantity
+     * @return bool
+     */
+    function hasProduct($product, $quantity = 1) {
+        $res = false;
+        if ($this->products[$product->getId()] >= $quantity) {
+            $res = true;
+        }
+        return $res;
+    }
 }
