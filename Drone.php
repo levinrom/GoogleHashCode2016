@@ -28,7 +28,7 @@ class Drone
         $this->status = !$this->status;
     }
 
-    function getStatus()
+    function isBusy()
     {
         return $this->status;
     }
