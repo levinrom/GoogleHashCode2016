@@ -2,11 +2,15 @@
 
 require_once('OptimiseOrders.php');
 require_once('Drone.php');
-//require_once('product.php');
+require_once('Product.php');
 require_once('Warehouse.php');
-//require_once('delivery.php');
+//require_once('Order.php');
 require_once('src/parser.php');
 
+
+function getClosestWHWithProduct($pId) {
+
+}
 
 $world = [
     "droneMaxWeight" => 0,
@@ -35,7 +39,13 @@ for ($currStep = 0; $currStep < $world["simLength"]; $currStep++) {
             // find next suitable delivery
 
             foreach($world["orders"] as $order) {
-
+                foreach($order["deliveries"] as $delivery) {
+                    // FROM WHERE?
+                    // Get closest WH with the product
+                    if ($drone.addAction('LOAD', $delivery["pId"], $delivery["amount"])) {
+                        $drone.addAction('DELIVER', $delivery["x"], $delivery["y"], $delivery["pId"], $delivery["amount"]);
+                    }
+                }
             }
         }
     }
