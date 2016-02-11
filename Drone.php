@@ -52,6 +52,7 @@ class Drone
         } else {
             // get next command
             if (count($this->commands) > 0) {
+                $nextCommand = $this->commands[0];
 
             } else {
                 // not busy
