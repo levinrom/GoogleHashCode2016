@@ -21,6 +21,7 @@ class Drone
         $this->x            = $x;
         $this->y            = $y;
         $this->status       = false;
+        $this->steps        = 0;
     }
 
     function changeStatus()
@@ -45,5 +46,18 @@ class Drone
         return $res;
     }
 
+    function doStep() {
+        if ($this->steps > 0) {
+            $this->steps--;
+        } else {
+            // get next command
+            if (count($this->commands) > 0) {
+
+            } else {
+                // not busy
+                $this->status = false;
+            }
+        }
+    }
 
 }
