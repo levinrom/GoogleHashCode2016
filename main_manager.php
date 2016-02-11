@@ -37,7 +37,8 @@ $world = parser::Parse();
 
 // Event loop
 for ($currStep = 0; $currStep < $world["simLength"]; $currStep++) {
-    $world["orders"] = OptimiseOrders::sortOrders($world);
+    $optimize = new OptimiseOrders();
+    $world["orders"] = $optimize->sortOrders($world);
 
     foreach ($world["drones"] as $drone) {
         if ($drone->getState() == "busy") {

@@ -58,7 +58,7 @@ class OptimiseOrders {
     }
 
     public static function findClosestWarehouseDistance($productId, $productCount, $order, $warehouses) {
-        $minDist = sqrt(10000*10000 + 10000*10000);
+        $minDist = PHP_INT_MAX;
         $minWarehouse = null;
         foreach ($warehouses as $warehouse) {
             /** @var $warehouse Warehouse */
@@ -71,8 +71,7 @@ class OptimiseOrders {
             }
         }
 
-        $closestWarehouseDistance = Utils::distance($minWarehouse, $order);
-        return array($minWarehouse, $closestWarehouseDistance);
+        return array($minWarehouse, $minDist);
     }
 
 
