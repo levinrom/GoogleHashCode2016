@@ -11,7 +11,11 @@ require_once("./Utils.php");
 class OptimiseOrders {
     public $listOfOrders = array();
 
-    public function sortOrders($warehouses, $orders, $drones) {
+    public function sortOrders($world) {
+
+        $orders = $world->orders;
+        $warehouses = $world->warehouses;
+        $drones = $world->drones;
 
         // Give each order a score
         $orderByScore = array();
@@ -19,7 +23,7 @@ class OptimiseOrders {
         foreach ($orders as $order) {
             $cOrderScore = 0;
             foreach ($order->products as $product) {
-                list($cWarehouse, $cMinDist) += self::findClosestWarehouseDistance($product, $order, $warehouses);
+                list($cWarehouse, $cMinDist) = self::findClosestWarehouseDistance($product, $order, $warehouses);
                 $cOrderScore += $cMinDist;
             }
             $orderByScore[$cOrderScore] = $order;

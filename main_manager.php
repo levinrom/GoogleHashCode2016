@@ -57,7 +57,7 @@ for ($currStep = 0; $currStep < $world["simLength"]; $currStep++) {
                         $minDist = 100000000;
                         // find closest
                         foreach($possibleWH as $i => $wh) {
-                            $dist = Utils::distance($wh["x"], $wh["y"], $drone["x"], $drone["y"]);
+                            $dist = Utils::distance($wh, $drone);
                             if ($dist < $minDist) {
                                 $minDist = $dist;
                                 $whIndex = $i;
