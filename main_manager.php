@@ -5,9 +5,7 @@
 //require_once('product.php');
 //require_once('warehouse.php');
 //require_once('delivery.php');
-//require_once('parser.php');
-
-
+require_once('parser.php');
 
 
 $world = [
@@ -23,7 +21,7 @@ $world = [
 ];
 
 
-$world = parser::Parse('input.in');
+$world = parser::Parse();
 
 // Event loop
 for ($currStep = 0; $currStep < $world["simLength"]; $currStep++) {
