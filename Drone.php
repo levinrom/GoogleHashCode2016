@@ -35,7 +35,7 @@ class Drone
 
     function addProduct($prodId, $prodWeight ,$quantity)
     {
-        $res = false
+        $res = false;
         $totalWeight = $this->currentPayload + ($prodWeight * $quantity);
         if ($totalWeight <= $this->maxPayload) {
             $this->productsArray[$prodId] = $quantity;
