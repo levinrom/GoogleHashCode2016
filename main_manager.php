@@ -23,4 +23,4 @@
     ];
 
 
-    $world = parser::Parse('input.in');
+    $world = parser::Parse();
