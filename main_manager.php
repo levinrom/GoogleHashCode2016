@@ -24,3 +24,6 @@
 
 
     $world = parser::Parse('input.in');
+
+    // Event loop
+    for ($currStep = )
