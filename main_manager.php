@@ -5,6 +5,7 @@
     //require_once('product.php');
     //require_once('warehouse.php');
     //require_once('delivery.php');
+    //require_once('parser.php');
 
 
 
@@ -21,3 +22,5 @@
         "deliveries" => []
     ];
 
+
+    $world = parser::Parse('input.in');
