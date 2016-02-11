@@ -4,13 +4,13 @@ require_once('OptimiseOrders.php');
 require_once('Drone.php');
 require_once('Product.php');
 require_once('Warehouse.php');
-//require_once('Order.php');
+require_once('Order.php');
 require_once('src/parser.php');
 require_once('Utils.php');
 
 
-function getClosestWHWithProduct($pId) {
-
+function parseCommand($drone, $cmd, $p1, $p2, $p3, $p4) {
+    return $drone->Id." ".$cmd." ".$p1." ".$p2." ".$p3;
 }
 
 $world = [
@@ -25,6 +25,7 @@ $world = [
     "orders" => []
 ];
 
+$commands = [];
 
 $world = parser::Parse();
 
@@ -37,11 +38,9 @@ for ($currStep = 0; $currStep < $world["simLength"]; $currStep++) {
             $result = $drone->doStep();
         }
         else {
-            // find next suitable delivery
-
+            // find next suitable delivery. Sorted by importance.
             foreach($world["orders"] as $order) {
                 foreach($order["deliveries"] as $delivery) {
-                    // FROM WHERE?
                     // Get closest WH with the product
                     $possibleWH = [];
                     foreach($world["warehouses"] as $wh) {
@@ -52,9 +51,8 @@ for ($currStep = 0; $currStep < $world["simLength"]; $currStep++) {
 
                     // can make order
                     if (count($possibleWH) > 0) {
-
                         $whIndex = 0;
-                        $minDist = 100000000;
+                        $minDist = PHP_INT_MAX;
                         // find closest
                         foreach($possibleWH as $i => $wh) {
                             $dist = Utils::distance($wh, $drone);
@@ -66,8 +64,12 @@ for ($currStep = 0; $currStep < $world["simLength"]; $currStep++) {
 
                         $chosenWh = $world["warehouses"][$whIndex];
 
-                        if ($drone->addAction('LOAD', $chosenWh["x"], $chosenWh["y"], $delivery["pId"], $delivery["amount"])) {
-                            $drone->addAction('DELIVER', $delivery["x"], $delivery["y"], $delivery["pId"], $delivery["amount"]);
+                        if ($drone->addAction('L', $chosenWh["x"], $chosenWh["y"], $delivery["pId"], $delivery["amount"])) {
+                            $drone->addAction('D', $delivery["x"], $delivery["y"], $delivery["pId"], $delivery["amount"]);
+
+                            // Add to commands
+                            // for Load: droneId L whId pId amount
+
                         }
                     }
                 }
