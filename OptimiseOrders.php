@@ -15,7 +15,7 @@ class OptimiseOrders {
 
         // Give each order a score
         $orderByScore = array();
-        $warehousesForOrder
+        //$warehousesForOrder
         foreach ($orders as $order) {
             $cOrderScore = 0;
             foreach ($order->products as $product) {

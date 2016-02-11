@@ -13,6 +13,7 @@ class Drone
     private $currentPayload;
     private $productsArray;
     private $status;
+    private $maxPayload;
 
     function __construct($payload, $x, $y)
     {
@@ -22,7 +23,27 @@ class Drone
         $this->status       = false;
     }
 
+    function changeStatus()
+    {
+        $this->status = !$this->status;
+    }
 
+    function getStatus()
+    {
+        return $this->status;
+    }
+
+    function addProduct($prodId, $prodWeight ,$quantity)
+    {
+        $res = false;
+        $totalWeight = $this->currentPayload + ($prodWeight * $quantity);
+        if ($totalWeight <= $this->maxPayload) {
+            $this->productsArray[$prodId] = $quantity;
+            $this->currentPayload = $totalWeight;
+            $res = true;
+        }
+        return $res;
+    }
 
 
 }
