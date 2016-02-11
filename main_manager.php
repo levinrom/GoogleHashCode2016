@@ -9,8 +9,14 @@ require_once('src/parser.php');
 require_once('Utils.php');
 
 
-function parseCommand($drone, $cmd, $p1, $p2, $p3, $p4) {
+function parseCommand($drone, $cmd, $p1, $p2, $p3, $p4='') {
     return $drone->Id." ".$cmd." ".$p1." ".$p2." ".$p3;
+}
+
+function printCommands($commands) {
+    foreach($commands as $command) {
+        echo $command;
+    }
 }
 
 $world = [
@@ -69,7 +75,8 @@ for ($currStep = 0; $currStep < $world["simLength"]; $currStep++) {
 
                             // Add to commands
                             // for Load: droneId L whId pId amount
-
+                            $commands[] = parseCommand($drone, 'L', $chosenWh->id, $delivery["pId"], $delivery["amount"]);
+                            $commands[] = parseCommand($drone, 'D', $order->id, $delivery["pId"], $delivery["amount"]);
                         }
                     }
                 }
@@ -77,3 +84,5 @@ for ($currStep = 0; $currStep < $world["simLength"]; $currStep++) {
         }
     }
 }
+
+printCommands($commands);
